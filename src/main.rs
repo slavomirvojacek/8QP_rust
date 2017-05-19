@@ -9,20 +9,20 @@ type Board = Vec<Vec<Square>>;
 
 fn main() {
 	let size: u8 = 5;
-	let pos: (u8, u8) = (2, 2);
+	let queen_position: (u8, u8) = (2, 2);
+	let diagonals_to_fill: Vec<(u8, u8)> = get_diagonals_to_fill(size, queen_position);
 
 	let mut board: Board = vec![vec![Square::Empty; size as usize]; size as usize];
 
-	board = place_queen(board, pos);
-	board = fill_row(board, pos);
-	board = fill_col(board, pos);
-
-	let positions = get_positions_to_fill(size, pos);
-	println!("{:?}", positions);
+	board = place_queen(board, queen_position);
+	board = fill_row(board, queen_position);
+	board = fill_col(board, queen_position);
 
 	for r in board {
 		println!("{:?}", r);
-	}	
+	}
+
+	println!("{:?}", diagonals_to_fill);
 }
 
 fn place_queen(mut board: Board, pos: (u8, u8)) -> Board {
@@ -36,7 +36,6 @@ fn place_queen(mut board: Board, pos: (u8, u8)) -> Board {
 // 	board[r as usize][c as usize] = Square::Unattainable;
 // 	board
 // }
-
 
 fn fill_row(mut board: Board, pos: (u8, u8)) -> Board {
 	let (r, c) = pos;
@@ -74,7 +73,7 @@ fn fill_col(mut board: Board, pos: (u8, u8)) -> Board {
 	board
 }
 
-fn get_positions_to_fill(size: u8, pos: (u8, u8)) -> Vec<(i8, i8)> {
+fn get_diagonals_to_fill(size: u8, pos: (u8, u8)) -> Vec<(u8, u8)> {
 	let (r, c) = pos;
 	let mut cols: (i8, i8) = (c as i8, c as i8);
 
@@ -107,6 +106,7 @@ fn get_positions_to_fill(size: u8, pos: (u8, u8)) -> Vec<(i8, i8)> {
 	pairs
 		.into_iter()
 		.filter(|x| can_be_col_index(size, x.1))
+		.map(|pair| (pair.0 as u8, pair.1 as u8))
 		.collect()
 }
 
