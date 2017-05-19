@@ -8,13 +8,16 @@ enum Square {
 type Board = Vec<Vec<Square>>;
 
 fn main() {
-	let size: u8 = 5;
+	let size: u8 = 8;
 	let pos: (u8, u8) = (2, 2);
 
 	let mut board: Board = vec![vec![Square::Empty; size as usize]; size as usize];
 
 	board = place_queen(board, pos);
 	board = fill_row(board, pos);
+	board = fill_col(board, pos);
+
+	get_positions_to_fill(size, pos);
 
 	for r in board {
 		println!("{:?}", r);
@@ -50,6 +53,52 @@ fn fill_row(mut board: Board, pos: (u8, u8)) -> Board {
 		}
 	}
 	board
+}
+
+fn fill_col(mut board: Board, pos: (u8, u8)) -> Board {
+	let (r, c) = pos;
+	for row_index in 0..board.len() {
+		for col_index in 0..board[row_index].len() {
+			if col_index == c as usize {
+				match board[row_index][col_index] {
+					Square::Empty => board[row_index][col_index] = Square::Unattainable,
+					_ => match col_index == c as usize {
+						true => {},
+						_ => panic!("Unexpected Queen"),
+					}
+				}
+			}
+		}
+	}
+	board
+}
+
+fn get_positions_to_fill(size: u8, pos: (u8, u8)) {
+	let (r, c) = pos;
+	let mut cols: (i8, i8) = (c as i8, c as i8);
+
+	// Bottom: iterate through each row from queen start position to the end of the board
+	for i in r..size {
+		// ignore the starting row, for queen is already placed here
+		if i != r {
+			println!("row index {}; col pair {:?}", i, cols);
+		}
+
+		// with each row, calculate the next pair of columns to be filled
+		cols.0 -= 1;
+		cols.1 += 1;
+	}
+
+	// reset starting columns pair
+	cols = (c as i8, c as i8);
+
+	// Top: iterate through each row from 0 to queen start position, in reverse order; queen pos will be ignored
+	for i in (0..r).rev() {
+		cols.0 -= 1;
+		cols.1 += 1;
+
+		println!("row index {}; col pair {:?}", i, cols);
+	}
 }
 
 // .iter_mut()
