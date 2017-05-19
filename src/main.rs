@@ -31,7 +31,7 @@ fn place_queen(mut board: Board, pos: (u8, u8)) -> Board {
 	board
 }
 
-// fn fill_square(mut board: Board, pos: (u8, u8)) -> Board {
+// fn fill_pos(mut board: Board, pos: (u8, u8)) -> Board {
 // 	let (r, c) = pos;
 // 	board[r as usize][c as usize] = Square::Unattainable;
 // 	board
@@ -82,14 +82,14 @@ fn get_positions_to_fill(size: u8, pos: (u8, u8)) -> Vec<(i8, i8)> {
 
 	// Bottom: iterate through each row from queen start position to the end of the board
 	for i in r..size {
-		cols.0 -= 1;
-		cols.1 += 1;
-		
 		// ignore the starting row, for queen is already placed here
 		if i != r {
 			pairs.push((i as i8, cols.0));
 			pairs.push((i as i8, cols.1));
 		}
+
+		cols.0 -= 1;
+		cols.1 += 1;
 	}
 
 	// reset starting columns pair
@@ -105,6 +105,13 @@ fn get_positions_to_fill(size: u8, pos: (u8, u8)) -> Vec<(i8, i8)> {
 	}
 
 	pairs
+		.into_iter()
+		.filter(|x| can_be_col_index(size, x.1))
+		.collect()
+}
+
+fn can_be_col_index(size: u8, col: i8) -> bool {
+	col <= size as i8 && col >= 0
 }
 
 
