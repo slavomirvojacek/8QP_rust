@@ -25,8 +25,6 @@ fn main() {
 	for r in board {
 		println!("{:?}", r);
 	}
-
-	// println!("{:?}", diagonals_to_fill);
 }
 
 fn place_queen(mut board: Board, pos: (u8, u8)) -> Board {
