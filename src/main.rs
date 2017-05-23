@@ -27,14 +27,12 @@ fn main() {
 	}
 }
 
-fn place_queen(mut board: Board, pos: (u8, u8)) -> Board {
-	let (r, c) = pos;
+fn place_queen(mut board: Board, (r, c): (u8, u8)) -> Board {
 	board[r as usize][c as usize] = Square::Queen { r: r, c: c };
 	board
 }
 
-fn fill_pos(mut board: Board, pos: (u8, u8)) -> Board {
-	let (r, c) = pos;
+fn fill_pos(mut board: Board, (r, c): (u8, u8)) -> Board {
 	match board[r as usize][c as usize] {
 		Square::Empty => board[r as usize][c as usize] = Square::Unattainable,
 		_ => panic!("Unexpected Queen"),
@@ -42,8 +40,7 @@ fn fill_pos(mut board: Board, pos: (u8, u8)) -> Board {
 	board
 }
 
-fn fill_row(mut board: Board, pos: (u8, u8)) -> Board {
-	let (r, c) = pos;
+fn fill_row(mut board: Board, (r, c): (u8, u8)) -> Board {
 	for row_index in 0..board.len() {
 		if row_index == r as usize {
 			for col_index in 0..board[row_index].len() {
@@ -60,8 +57,7 @@ fn fill_row(mut board: Board, pos: (u8, u8)) -> Board {
 	board
 }
 
-fn fill_col(mut board: Board, pos: (u8, u8)) -> Board {
-	let (r, c) = pos;
+fn fill_col(mut board: Board, (r, c): (u8, u8)) -> Board {
 	for row_index in 0..board.len() {
 		for col_index in 0..board[row_index].len() {
 			if col_index == c as usize {
@@ -78,10 +74,8 @@ fn fill_col(mut board: Board, pos: (u8, u8)) -> Board {
 	board
 }
 
-fn get_diagonals_to_fill(size: u8, pos: (u8, u8)) -> Vec<(u8, u8)> {
-	let (r, c) = pos;
+fn get_diagonals_to_fill(size: u8, (r, c): (u8, u8)) -> Vec<(u8, u8)> {
 	let mut cols: (i8, i8) = (c as i8, c as i8);
-
 	let mut pairs: Vec<(i8, i8)> = Vec::new();
 
 	// Bottom: iterate through each row from queen start position to the end of the board
